@@ -1,3 +1,5 @@
+import type { Game } from './types';
+
 function App() {
   return (
     <div className="App">
