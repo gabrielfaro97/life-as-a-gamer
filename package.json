@@ -42,7 +42,11 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "devDependencies": {
-    "jest": "^27.5.1"
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "jest": "^27.5.1",
+    "typescript": "^4.9.5"
   },
   "repository": {
     "type": "git",
@@ -51,7 +55,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/gabrielfaro97/life-as-a-gamer/issues"
   },
