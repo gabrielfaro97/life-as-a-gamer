@@ -6,10 +6,9 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from 'react';
-
-import type { Game } from '../types/Game';
-import { loadGames, saveGames } from '../utils/storage';
+} from "react";
+import type { Game } from "../types/Game";
+import { loadGames, saveGames } from "../utils/storage";
 
 type GameContextValue = {
   games: Game[];
@@ -40,9 +39,7 @@ function GameProvider({ children }: GameProviderProps) {
   }, []);
 
   const updateGame = useCallback((game: Game) => {
-    setGames((current) =>
-      current.map((g) => (g.id === game.id ? game : g)),
-    );
+    setGames((current) => current.map((g) => (g.id === game.id ? game : g)));
   }, []);
 
   const value = useMemo(
@@ -50,16 +47,14 @@ function GameProvider({ children }: GameProviderProps) {
     [games, addGame, removeGame, updateGame],
   );
 
-  return (
-    <GameContext.Provider value={value}>{children}</GameContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
 function useGames(): GameContextValue {
   const context = useContext(GameContext);
 
   if (!context) {
-    throw new Error('useGames deve ser usado dentro de GameProvider');
+    throw new Error("useGames deve ser usado dentro de GameProvider");
   }
 
   return context;
