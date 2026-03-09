@@ -23,7 +23,10 @@ function Dashboard() {
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [gameToDelete, setGameToDelete] = useState<Game | null>(null);
   const [yearFilter, setYearFilter] = useState<string>('all');
+  const [platformFilter, setPlatformFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortOption>('date-desc');
+
+  const OTHERS_PLATFORM = '__others__';
 
   function handleConfirmDelete() {
     if (gameToDelete) {
@@ -56,6 +59,19 @@ function Dashboard() {
     return Array.from(years).sort((a, b) => b - a);
   }, [games]);
 
+  const availablePlatforms = useMemo(() => {
+    const platforms = new Set<string>();
+    for (const game of games) {
+      const platform = game.platform?.trim() || OTHERS_PLATFORM;
+      platforms.add(platform);
+    }
+    return Array.from(platforms).sort((a, b) => {
+      if (a === OTHERS_PLATFORM) return 1;
+      if (b === OTHERS_PLATFORM) return -1;
+      return a.localeCompare(b);
+    });
+  }, [games]);
+
   const filteredAndSortedGames = useMemo(() => {
     let result = games;
 
@@ -64,6 +80,13 @@ function Dashboard() {
       result = result.filter(
         (g) => new Date(g.finishedAt).getFullYear() === year,
       );
+    }
+
+    if (platformFilter !== 'all') {
+      result = result.filter((g) => {
+        const platform = g.platform?.trim() || OTHERS_PLATFORM;
+        return platform === platformFilter;
+      });
     }
 
     result = [...result].sort((a, b) => {
@@ -86,20 +109,7 @@ function Dashboard() {
     });
 
     return result;
-  }, [games, yearFilter, sortBy]);
-
-  const gamesByPlatform = useMemo(() => {
-    const map = new Map<string, Game[]>();
-    for (const game of filteredAndSortedGames) {
-      const platform = game.platform || t('dashboard.others');
-      const list = map.get(platform) ?? [];
-      list.push(game);
-      map.set(platform, list);
-    }
-    return Array.from(map.entries()).sort(([a], [b]) =>
-      a.localeCompare(b),
-    );
-  }, [filteredAndSortedGames, t]);
+  }, [games, yearFilter, platformFilter, sortBy]);
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
@@ -118,10 +128,10 @@ function Dashboard() {
         onCancel={() => setGameToDelete(null)}
       />
       <Header onAddGame={handleOpenAddGame} />
-      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 pb-8 pt-28">
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-          <div className="rounded-xl bg-zinc-100 p-6 shadow-md dark:bg-zinc-800">
-            <div className="flex items-start justify-between gap-4">
+      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 pb-8 pt-24 sm:px-6 sm:pt-28">
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+          <div className="order-2 rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6 lg:order-1">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                   {t('dashboard.gamesTitle')}
@@ -133,7 +143,7 @@ function Dashboard() {
               <StatsBar total={filteredAndSortedGames.length} />
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <div className="flex items-center gap-2">
                 <label
                   htmlFor="year-filter"
@@ -151,6 +161,27 @@ function Dashboard() {
                   {availableYears.map((y) => (
                     <option key={y} value={y}>
                       {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="platform-filter"
+                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+                >
+                  {t('dashboard.platform')}
+                </label>
+                <select
+                  id="platform-filter"
+                  value={platformFilter}
+                  onChange={(e) => setPlatformFilter(e.target.value)}
+                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                >
+                  <option value="all">{t('dashboard.all')}</option>
+                  {availablePlatforms.map((p) => (
+                    <option key={p} value={p}>
+                      {p === OTHERS_PLATFORM ? t('dashboard.others') : p}
                     </option>
                   ))}
                 </select>
@@ -180,28 +211,21 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-8 space-y-8">
-              {gamesByPlatform.map(([platform, platformGames]) => (
-                <div key={platform}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    {platform}
-                  </h3>
-                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {platformGames.map((game) => (
-                      <GameCard
-                        key={game.id}
-                        game={game}
-                        onEdit={(g) => setGameToEdit(g)}
-                        onDelete={(g) => setGameToDelete(g)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
+            <div className="mt-8">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {filteredAndSortedGames.map((game) => (
+                  <GameCard
+                    key={game.id}
+                    game={game}
+                    onEdit={(g) => setGameToEdit(g)}
+                    onDelete={(g) => setGameToDelete(g)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
-          <aside className="rounded-xl bg-zinc-100 p-6 shadow-md dark:bg-zinc-800">
+          <aside className="order-1 rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6 lg:order-2">
             <AddGameForm
             initialGame={gameToEdit}
             onSubmit={gameToEdit ? handleUpdateGame : addGame}
