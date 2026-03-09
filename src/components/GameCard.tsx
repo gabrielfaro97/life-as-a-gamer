@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import type { Game } from '../types/Game';
 
 type GameCardProps = {
@@ -9,14 +11,14 @@ type GameCardProps = {
 const FALLBACK_COVER =
   'https://placehold.co/600x900/18181b/f4f4f5?text=Sem+capa';
 
-function formatFinishedAt(finishedAt: string) {
+function formatFinishedAt(finishedAt: string, locale: string, invalidDateLabel: string) {
   const parsedDate = new Date(finishedAt);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Data invalida';
+    return invalidDateLabel;
   }
 
-  return new Intl.DateTimeFormat('pt-BR', {
+  return new Intl.DateTimeFormat(locale === 'pt-BR' ? 'pt-BR' : 'en-US', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -24,12 +26,14 @@ function formatFinishedAt(finishedAt: string) {
 }
 
 function GameCard({ game, onEdit, onDelete }: GameCardProps) {
+  const { t, i18n } = useTranslation();
+
   return (
     <article className="overflow-hidden rounded-xl border border-zinc-300 bg-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:-translate-y-1 hover:border-zinc-400 hover:shadow-lg dark:border-zinc-500/90 dark:bg-zinc-800 dark:shadow-[0_8px_20px_rgba(0,0,0,0.22)] dark:hover:border-zinc-400 dark:hover:shadow-[0_12px_28px_rgba(0,0,0,0.3)]">
       <div className="aspect-[2/3] overflow-hidden bg-zinc-200 dark:bg-zinc-900">
         <img
           src={game.coverUrl || FALLBACK_COVER}
-          alt={`Capa de ${game.name}`}
+          alt={t('gameCard.coverAlt', { name: game.name })}
           className="h-full w-full object-cover"
           onError={(event) => {
             event.currentTarget.onerror = null;
@@ -46,13 +50,13 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
 
         <dl className="grid grid-cols-2 gap-3 text-sm">
           <div className="rounded-xl border border-zinc-300 bg-zinc-200/60 p-3 dark:border-zinc-700 dark:bg-zinc-900/60">
-            <dt className="text-zinc-500 dark:text-zinc-400">Finalizado</dt>
+            <dt className="text-zinc-500 dark:text-zinc-400">{t('gameCard.finished')}</dt>
             <dd className="mt-1 font-medium text-zinc-900 dark:text-zinc-100">
-              {formatFinishedAt(game.finishedAt)}
+              {formatFinishedAt(game.finishedAt, i18n.language, t('gameCard.invalidDate'))}
             </dd>
           </div>
           <div className="rounded-xl border border-zinc-300 bg-zinc-200/60 p-3 dark:border-zinc-700 dark:bg-zinc-900/60">
-            <dt className="text-zinc-500 dark:text-zinc-400">Nota</dt>
+            <dt className="text-zinc-500 dark:text-zinc-400">{t('gameCard.rating')}</dt>
             <dd className="mt-1 font-medium text-zinc-900 dark:text-zinc-100">{game.rating}/10</dd>
           </div>
         </dl>
@@ -63,14 +67,14 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
             onClick={() => onEdit(game)}
             className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
           >
-            Editar
+            {t('gameCard.edit')}
           </button>
           <button
             type="button"
             onClick={() => onDelete(game)}
             className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-red-400"
           >
-            Deletar
+            {t('gameCard.delete')}
           </button>
         </div>
       </div>

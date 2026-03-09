@@ -30,6 +30,8 @@
         try {
           var theme = localStorage.getItem('life-as-a-gamer:theme');
           if (theme !== 'light') document.documentElement.classList.add('dark');
+          var lang = localStorage.getItem('life-as-a-gamer:language');
+          if (lang === 'pt-BR' || lang === 'en') document.documentElement.lang = lang;
         } catch (e) {}
       })();
     </script>

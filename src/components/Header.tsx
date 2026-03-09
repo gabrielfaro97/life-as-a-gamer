@@ -1,3 +1,8 @@
+import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import flagBR from '../assets/bandeira-do-brasil.png';
+import flagUS from '../assets/estados-unidos-da-america.png';
 import { useTheme } from '../context/ThemeContext';
 
 type HeaderProps = {
@@ -5,26 +10,99 @@ type HeaderProps = {
 };
 
 function Header({ onAddGame }: HeaderProps) {
+  const { t, i18n } = useTranslation();
   const { isDark, toggleTheme } = useTheme();
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
-            Life as a Gamer
+            {t('app.title')}
           </p>
           <h1 className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-            Dashboard
+            {t('app.dashboard')}
           </h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex h-11 items-center gap-3">
+          <div ref={langRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex h-11 items-center gap-2 rounded-xl border border-zinc-300 bg-transparent pl-3 pr-3 text-sm text-zinc-600 dark:border-zinc-600 dark:text-zinc-400"
+              aria-label={t('header.language')}
+              aria-expanded={langOpen}
+              aria-haspopup="listbox"
+            >
+              <img
+                src={i18n.language === 'pt-BR' ? flagBR : flagUS}
+                alt=""
+                className="h-5 w-7 object-contain"
+              />
+              <span>{i18n.language === 'pt-BR' ? 'PT' : 'EN'}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className={`h-4 w-4 transition-transform ${langOpen ? 'rotate-180' : ''}`}
+              >
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {langOpen && (
+              <ul
+                role="listbox"
+                className="absolute right-0 top-full z-20 mt-1 min-w-full overflow-hidden rounded-xl border border-zinc-300 bg-white shadow-lg dark:border-zinc-600 dark:bg-zinc-800"
+              >
+                <li role="option" aria-selected={i18n.language === 'pt-BR'}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      i18n.changeLanguage('pt-BR');
+                      setLangOpen(false);
+                    }}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                  >
+                    <img src={flagBR} alt="" className="h-5 w-7 object-contain" />
+                    PT
+                  </button>
+                </li>
+                <li role="option" aria-selected={i18n.language === 'en'}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      i18n.changeLanguage('en');
+                      setLangOpen(false);
+                    }}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                  >
+                    <img src={flagUS} alt="" className="h-5 w-7 object-contain" />
+                    EN
+                  </button>
+                </li>
+              </ul>
+            )}
+          </div>
           <button
             type="button"
             onClick={toggleTheme}
-            className="rounded-xl border border-zinc-300 bg-transparent p-2.5 text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            title={isDark ? 'Modo claro' : 'Modo escuro'}
-            aria-label={isDark ? 'Ativar modo claro' : 'Ativar modo escuro'}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-300 bg-transparent text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            title={isDark ? t('header.lightMode') : t('header.darkMode')}
+            aria-label={isDark ? t('header.lightModeAria') : t('header.darkModeAria')}
           >
             {isDark ? (
               <svg
@@ -53,9 +131,9 @@ function Header({ onAddGame }: HeaderProps) {
           <button
             type="button"
             onClick={onAddGame}
-            className="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
+            className="flex h-11 items-center rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
           >
-            Adicionar jogo
+            {t('header.addGame')}
           </button>
         </div>
       </div>
