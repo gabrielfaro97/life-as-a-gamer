@@ -60,9 +60,17 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
 
       <div className="space-y-4 p-5">
         <div className="space-y-2">
-          <h3 className="line-clamp-2 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            {game.name}
-          </h3>
+          <div className="group relative">
+            <h3 className="min-h-[2.5em] line-clamp-2 text-lg font-semibold leading-tight text-zinc-900 dark:text-zinc-100">
+              {game.name}
+            </h3>
+            <span
+              className="pointer-events-none absolute bottom-full left-0 z-20 mb-1 max-w-[min(16rem,100vw)] scale-95 rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-sm font-medium text-zinc-900 opacity-0 shadow-lg transition-all duration-150 group-hover:scale-100 group-hover:opacity-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+              role="tooltip"
+            >
+              {game.name}
+            </span>
+          </div>
           <span className="inline-block rounded-lg bg-zinc-300/80 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-600/80 dark:text-zinc-300">
             {game.platform}
           </span>

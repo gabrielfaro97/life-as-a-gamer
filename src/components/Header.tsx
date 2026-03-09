@@ -27,7 +27,7 @@ function Header({ onAddGame }: HeaderProps) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
             {t('app.title')}
@@ -36,7 +36,7 @@ function Header({ onAddGame }: HeaderProps) {
             {t('app.dashboard')}
           </h1>
         </div>
-        <div className="flex h-11 items-center gap-3">
+        <div className="flex h-11 flex-wrap items-center gap-2 sm:gap-3">
           <div ref={langRef} className="relative">
             <button
               type="button"
