@@ -100,7 +100,7 @@ function Dashboard() {
   }, [filteredAndSortedGames]);
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-100">
+    <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
       <ConfirmDialog
         open={Boolean(gameToDelete)}
         title="Remover jogo"
@@ -118,13 +118,13 @@ function Dashboard() {
       <Header onAddGame={handleOpenAddGame} />
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 pb-8 pt-28">
         <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-          <div className="rounded-xl bg-zinc-800 p-6 shadow-md">
+          <div className="rounded-xl bg-zinc-100 p-6 shadow-md dark:bg-zinc-800">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-zinc-100">
+                <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                   Seus jogos zerados
                 </h2>
-                <p className="mt-2 text-sm text-zinc-400">
+                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
                   Visualize os jogos finalizados e mantenha sua biblioteca
                   organizada.
                 </p>
@@ -136,7 +136,7 @@ function Dashboard() {
               <div className="flex items-center gap-2">
                 <label
                   htmlFor="year-filter"
-                  className="text-sm font-medium text-zinc-400"
+                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
                 >
                   Ano
                 </label>
@@ -144,7 +144,7 @@ function Dashboard() {
                   id="year-filter"
                   value={yearFilter}
                   onChange={(e) => setYearFilter(e.target.value)}
-                  className="rounded-lg border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-indigo-500"
+                  className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
                   <option value="all">Todos</option>
                   {availableYears.map((y) => (
@@ -157,7 +157,7 @@ function Dashboard() {
               <div className="flex items-center gap-2">
                 <label
                   htmlFor="sort-by"
-                  className="text-sm font-medium text-zinc-400"
+                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
                 >
                   Ordenar
                 </label>
@@ -167,7 +167,7 @@ function Dashboard() {
                   onChange={(e) =>
                     setSortBy(e.target.value as SortOption)
                   }
-                  className="rounded-lg border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-indigo-500"
+                  className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
                   <option value="date-desc">Data (mais recente)</option>
                   <option value="date-asc">Data (mais antiga)</option>
@@ -182,7 +182,7 @@ function Dashboard() {
             <div className="mt-8 space-y-8">
               {gamesByPlatform.map(([platform, platformGames]) => (
                 <div key={platform}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                     {platform}
                   </h3>
                   <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -200,7 +200,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <aside className="rounded-xl bg-zinc-800 p-6 shadow-md">
+          <aside className="rounded-xl bg-zinc-100 p-6 shadow-md dark:bg-zinc-800">
             <AddGameForm
             initialGame={gameToEdit}
             onSubmit={gameToEdit ? handleUpdateGame : addGame}

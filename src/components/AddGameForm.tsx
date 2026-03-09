@@ -125,10 +125,10 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
   return (
     <form id="add-game-form" className="space-y-4" onSubmit={handleSubmit}>
       <div>
-        <h2 className="text-lg font-semibold text-zinc-100">
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           {isEditMode ? 'Editar jogo' : 'Adicionar novo jogo'}
         </h2>
-        <p className="mt-2 text-sm text-zinc-400">
+        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
           {isEditMode
             ? 'Atualize os dados do jogo e salve as alterações.'
             : 'Cadastre um jogo finalizado para atualizar sua biblioteca.'}
@@ -136,7 +136,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-zinc-200" htmlFor="name">
+        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-200" htmlFor="name">
           Nome
         </label>
         <input
@@ -145,7 +145,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           type="text"
           value={values.name}
           onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
           placeholder="Ex: Hollow Knight"
           required
         />
@@ -153,10 +153,10 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
 
       <div className="space-y-2">
         <label
-          className="block text-sm font-medium text-zinc-200"
+          className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
           htmlFor="coverUrl"
         >
-          URL da capa <span className="text-zinc-500">(opcional)</span>
+          URL da capa <span className="text-zinc-500 dark:text-zinc-500">(opcional)</span>
         </label>
         <input
           id="coverUrl"
@@ -164,7 +164,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           type="url"
           value={values.coverUrl}
           onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
           placeholder="https://..."
         />
       </div>
@@ -172,7 +172,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <label
-            className="block text-sm font-medium text-zinc-200"
+            className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
             htmlFor="finishedAt"
           >
             Data de finalizacao
@@ -183,14 +183,14 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             type="date"
             value={values.finishedAt}
             onChange={handleChange}
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+            className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
             required
           />
         </div>
 
         <div className="space-y-2">
           <label
-            className="block text-sm font-medium text-zinc-200"
+            className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
             htmlFor="rating"
           >
             Nota
@@ -204,7 +204,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             step="1"
             value={values.rating}
             onChange={handleChange}
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+            className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
             placeholder="1 a 10"
             required
           />
@@ -213,7 +213,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
 
       <div className="space-y-2">
         <label
-          className="block text-sm font-medium text-zinc-200"
+          className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
           htmlFor="platform"
         >
           Plataforma
@@ -223,7 +223,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           name="platform"
           value={values.platform}
           onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
           required
         >
           <option value="">Selecione uma plataforma</option>
@@ -246,14 +246,14 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-xl border border-zinc-600 bg-transparent px-4 py-3 text-sm font-semibold text-zinc-300 transition-all duration-200 ease-in-out hover:border-zinc-500 hover:text-zinc-100"
+            className="flex-1 rounded-xl border border-zinc-300 bg-transparent dark:border-zinc-600 px-4 py-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300 transition-all duration-200 ease-in-out hover:border-zinc-400 hover:text-zinc-900 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
           >
             Cancelar
           </button>
         ) : null}
         <button
           type="submit"
-          className={`rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500 ${onCancel ? 'flex-1' : 'w-full'}`}
+          className={`rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500 ${onCancel ? 'flex-1' : 'w-full'}`}
         >
           {isEditMode ? 'Salvar alterações' : 'Salvar jogo'}
         </button>
