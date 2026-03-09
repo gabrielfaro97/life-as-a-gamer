@@ -4,6 +4,7 @@ import AddGameForm from '../components/AddGameForm';
 import ConfirmDialog from '../components/ConfirmDialog';
 import GameCard from '../components/GameCard';
 import Header from '../components/Header';
+import StatsBar from '../components/StatsBar';
 import { useGames } from '../context/GameContext';
 import type { Game } from '../types/Game';
 
@@ -64,9 +65,7 @@ function Dashboard() {
                   organizada.
                 </p>
               </div>
-              <span className="rounded-xl border border-zinc-700 px-3 py-1 text-sm text-zinc-400">
-                {games.length} {games.length === 1 ? 'jogo' : 'jogos'}
-              </span>
+              <StatsBar total={games.length} />
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
