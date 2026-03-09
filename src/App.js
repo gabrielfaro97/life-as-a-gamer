@@ -1,7 +1,12 @@
+import { GameProvider } from './context/GameContext';
 import Dashboard from './pages/Dashboard';
 
 function App() {
-  return <Dashboard />;
+  return (
+    <GameProvider>
+      <Dashboard />
+    </GameProvider>
+  );
 }
 
 export default App;
