@@ -6,7 +6,7 @@ const sampleGame: Game = {
   id: '1',
   name: 'The Legend of Zelda: Tears of the Kingdom',
   coverUrl:
-    'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=900&q=80',
+    'https://cdn2.steamgriddb.com/grid/ae758fbcbd5bd841516c53b3c08ebc6f.png',
   finishedAt: '2026-03-01T00:00:00.000Z',
   platform: 'Nintendo Switch',
   rating: 10,
