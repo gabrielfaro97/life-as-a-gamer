@@ -25,6 +25,22 @@ function formatFinishedAt(finishedAt: string, locale: string, invalidDateLabel: 
   }).format(parsedDate);
 }
 
+function RatingIndicator({ rating }: { rating: number }) {
+  const filled = Math.round((rating / 10) * 5);
+  return (
+    <div className="flex w-full gap-1" aria-hidden>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className={`h-2 flex-1 rounded-full transition-colors ${
+            i < filled ? 'bg-indigo-500' : 'bg-zinc-300 dark:bg-zinc-600'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 function GameCard({ game, onEdit, onDelete }: GameCardProps) {
   const { t, i18n } = useTranslation();
 
@@ -43,12 +59,16 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
       </div>
 
       <div className="space-y-4 p-5">
-        <div className="space-y-1">
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{game.name}</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">{game.platform}</p>
+        <div className="space-y-2">
+          <h3 className="line-clamp-2 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            {game.name}
+          </h3>
+          <span className="inline-block rounded-lg bg-zinc-300/80 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-600/80 dark:text-zinc-300">
+            {game.platform}
+          </span>
         </div>
 
-        <dl className="grid grid-cols-2 gap-3 text-sm">
+        <dl className="flex flex-col gap-3 text-sm">
           <div className="rounded-xl border border-zinc-300 bg-zinc-200/60 p-3 dark:border-zinc-700 dark:bg-zinc-900/60">
             <dt className="text-zinc-500 dark:text-zinc-400">{t('gameCard.finished')}</dt>
             <dd className="mt-1 font-medium text-zinc-900 dark:text-zinc-100">
@@ -57,7 +77,12 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
           </div>
           <div className="rounded-xl border border-zinc-300 bg-zinc-200/60 p-3 dark:border-zinc-700 dark:bg-zinc-900/60">
             <dt className="text-zinc-500 dark:text-zinc-400">{t('gameCard.rating')}</dt>
-            <dd className="mt-1 font-medium text-zinc-900 dark:text-zinc-100">{game.rating}/10</dd>
+            <dd className="mt-1.5 flex flex-col gap-1">
+              <RatingIndicator rating={game.rating} />
+              <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                {game.rating}/10
+              </span>
+            </dd>
           </div>
         </dl>
 
