@@ -91,7 +91,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
     const platform = values.platform.trim();
     const rating = Number(values.rating);
 
-    if (!name || !coverUrl || !values.finishedAt || !platform || !values.rating) {
+    if (!name || !values.finishedAt || !platform || !values.rating) {
       setErrorMessage('Preencha todos os campos obrigatorios.');
       return;
     }
@@ -111,7 +111,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
     const game: Game = {
       id: initialGame?.id ?? generateGameId(),
       name,
-      coverUrl,
+      coverUrl: coverUrl || '',
       finishedAt,
       platform,
       rating,
@@ -156,7 +156,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           className="block text-sm font-medium text-zinc-200"
           htmlFor="coverUrl"
         >
-          URL da capa
+          URL da capa <span className="text-zinc-500">(opcional)</span>
         </label>
         <input
           id="coverUrl"
@@ -166,7 +166,6 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           onChange={handleChange}
           className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
           placeholder="https://..."
-          required
         />
       </div>
 
