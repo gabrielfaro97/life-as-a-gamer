@@ -1,26 +1,10 @@
-import { useState } from 'react';
-
 import AddGameForm from '../components/AddGameForm';
 import GameCard from '../components/GameCard';
 import Header from '../components/Header';
-import type { Game } from '../types/Game';
-
-const sampleGame: Game = {
-  id: '1',
-  name: 'The Legend of Zelda: Tears of the Kingdom',
-  coverUrl:
-    'https://cdn2.steamgriddb.com/grid/ae758fbcbd5bd841516c53b3c08ebc6f.png',
-  finishedAt: '2026-03-01T00:00:00.000Z',
-  platform: 'Nintendo Switch',
-  rating: 10,
-};
+import { useGames } from '../context/GameContext';
 
 function Dashboard() {
-  const [games, setGames] = useState<Game[]>([sampleGame]);
-
-  function handleAddGame(game: Game) {
-    setGames((currentGames) => [game, ...currentGames]);
-  }
+  const { games, addGame, removeGame } = useGames();
 
   function handleOpenAddGame() {
     const formElement = document.getElementById('add-game-form');
@@ -61,14 +45,14 @@ function Dashboard() {
                   key={game.id}
                   game={game}
                   onEdit={() => undefined}
-                  onDelete={() => undefined}
+                  onDelete={removeGame}
                 />
               ))}
             </div>
           </div>
 
           <aside className="rounded-xl bg-zinc-800 p-6 shadow-md">
-            <AddGameForm onSubmit={handleAddGame} />
+            <AddGameForm onSubmit={addGame} />
           </aside>
         </section>
       </main>
