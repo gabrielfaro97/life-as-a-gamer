@@ -144,7 +144,7 @@ function Dashboard() {
                   id="year-filter"
                   value={yearFilter}
                   onChange={(e) => setYearFilter(e.target.value)}
-                  className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
                   <option value="all">Todos</option>
                   {availableYears.map((y) => (
@@ -167,7 +167,7 @@ function Dashboard() {
                   onChange={(e) =>
                     setSortBy(e.target.value as SortOption)
                   }
-                  className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
                   <option value="date-desc">Data (mais recente)</option>
                   <option value="date-asc">Data (mais antiga)</option>

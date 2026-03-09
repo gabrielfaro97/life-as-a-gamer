@@ -223,7 +223,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           name="platform"
           value={values.platform}
           onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
+          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 pl-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
           required
         >
           <option value="">Selecione uma plataforma</option>
