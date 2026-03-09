@@ -1,4 +1,16 @@
+import GameCard from '../components/GameCard';
 import Header from '../components/Header';
+import type { Game } from '../types/Game';
+
+const sampleGame: Game = {
+  id: '1',
+  name: 'The Legend of Zelda: Tears of the Kingdom',
+  coverUrl:
+    'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=900&q=80',
+  finishedAt: '2026-03-01T00:00:00.000Z',
+  platform: 'Nintendo Switch',
+  rating: 10,
+};
 
 function Dashboard() {
   return (
@@ -13,21 +25,21 @@ function Dashboard() {
                   Seus jogos zerados
                 </h2>
                 <p className="mt-2 text-sm text-zinc-400">
-                  Comece adicionando o primeiro jogo para montar sua biblioteca.
+                  Visualize os jogos finalizados e mantenha sua biblioteca
+                  organizada.
                 </p>
               </div>
               <span className="rounded-xl border border-zinc-700 px-3 py-1 text-sm text-zinc-400">
-                0 jogos
+                1 jogo
               </span>
             </div>
 
-            <div className="mt-8 rounded-xl border border-dashed border-zinc-700 bg-zinc-900/60 p-8 text-center">
-              <p className="text-base font-medium text-zinc-100">
-                Nenhum jogo cadastrado ainda
-              </p>
-              <p className="mt-2 text-sm text-zinc-400">
-                Use o botão &quot;Adicionar jogo&quot; para começar a preencher seu dashboard.
-              </p>
+            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <GameCard
+                game={sampleGame}
+                onEdit={() => undefined}
+                onDelete={() => undefined}
+              />
             </div>
           </div>
 
