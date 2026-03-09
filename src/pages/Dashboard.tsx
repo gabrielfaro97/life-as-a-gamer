@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AddGameForm from '../components/AddGameForm';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -17,6 +18,7 @@ type SortOption =
   | 'rating-asc';
 
 function Dashboard() {
+  const { t } = useTranslation();
   const { games, addGame, removeGame, updateGame } = useGames();
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [gameToDelete, setGameToDelete] = useState<Game | null>(null);
@@ -89,7 +91,7 @@ function Dashboard() {
   const gamesByPlatform = useMemo(() => {
     const map = new Map<string, Game[]>();
     for (const game of filteredAndSortedGames) {
-      const platform = game.platform || 'Outros';
+      const platform = game.platform || t('dashboard.others');
       const list = map.get(platform) ?? [];
       list.push(game);
       map.set(platform, list);
@@ -97,20 +99,20 @@ function Dashboard() {
     return Array.from(map.entries()).sort(([a], [b]) =>
       a.localeCompare(b),
     );
-  }, [filteredAndSortedGames]);
+  }, [filteredAndSortedGames, t]);
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
       <ConfirmDialog
         open={Boolean(gameToDelete)}
-        title="Remover jogo"
+        title={t('confirmDialog.removeGame')}
         message={
           gameToDelete
-            ? `Tem certeza que deseja remover "${gameToDelete.name}"?`
+            ? t('confirmDialog.removeGameMessage', { name: gameToDelete.name })
             : ''
         }
-        confirmLabel="Remover"
-        cancelLabel="Cancelar"
+        confirmLabel={t('confirmDialog.remove')}
+        cancelLabel={t('confirmDialog.cancel')}
         variant="danger"
         onConfirm={handleConfirmDelete}
         onCancel={() => setGameToDelete(null)}
@@ -122,11 +124,10 @@ function Dashboard() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                  Seus jogos zerados
+                  {t('dashboard.gamesTitle')}
                 </h2>
                 <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                  Visualize os jogos finalizados e mantenha sua biblioteca
-                  organizada.
+                  {t('dashboard.gamesDescription')}
                 </p>
               </div>
               <StatsBar total={filteredAndSortedGames.length} />
@@ -138,7 +139,7 @@ function Dashboard() {
                   htmlFor="year-filter"
                   className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
                 >
-                  Ano
+                  {t('dashboard.year')}
                 </label>
                 <select
                   id="year-filter"
@@ -146,7 +147,7 @@ function Dashboard() {
                   onChange={(e) => setYearFilter(e.target.value)}
                   className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
-                  <option value="all">Todos</option>
+                  <option value="all">{t('dashboard.all')}</option>
                   {availableYears.map((y) => (
                     <option key={y} value={y}>
                       {y}
@@ -159,7 +160,7 @@ function Dashboard() {
                   htmlFor="sort-by"
                   className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
                 >
-                  Ordenar
+                  {t('dashboard.sort')}
                 </label>
                 <select
                   id="sort-by"
@@ -169,12 +170,12 @@ function Dashboard() {
                   }
                   className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
                 >
-                  <option value="date-desc">Data (mais recente)</option>
-                  <option value="date-asc">Data (mais antiga)</option>
-                  <option value="name-asc">Nome (A–Z)</option>
-                  <option value="name-desc">Nome (Z–A)</option>
-                  <option value="rating-desc">Nota (maior)</option>
-                  <option value="rating-asc">Nota (menor)</option>
+                  <option value="date-desc">{t('dashboard.sortDateDesc')}</option>
+                  <option value="date-asc">{t('dashboard.sortDateAsc')}</option>
+                  <option value="name-asc">{t('dashboard.sortNameAsc')}</option>
+                  <option value="name-desc">{t('dashboard.sortNameDesc')}</option>
+                  <option value="rating-desc">{t('dashboard.sortRatingDesc')}</option>
+                  <option value="rating-asc">{t('dashboard.sortRatingAsc')}</option>
                 </select>
               </div>
             </div>

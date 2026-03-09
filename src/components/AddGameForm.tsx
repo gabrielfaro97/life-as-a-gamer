@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { Game } from '../types/Game';
 
@@ -56,6 +57,7 @@ function gameToFormValues(game: Game): FormValues {
 }
 
 function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
+  const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -92,19 +94,19 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
     const rating = Number(values.rating);
 
     if (!name || !values.finishedAt || !platform || !values.rating) {
-      setErrorMessage('Preencha todos os campos obrigatorios.');
+      setErrorMessage(t('addGameForm.errorRequired'));
       return;
     }
 
     if (!Number.isFinite(rating) || rating < 1 || rating > 10) {
-      setErrorMessage('A nota precisa ser um numero entre 1 e 10.');
+      setErrorMessage(t('addGameForm.errorRating'));
       return;
     }
 
     const finishedAt = buildIsoDate(values.finishedAt);
 
     if (Number.isNaN(new Date(finishedAt).getTime())) {
-      setErrorMessage('Informe uma data de finalizacao valida.');
+      setErrorMessage(t('addGameForm.errorDate'));
       return;
     }
 
@@ -126,18 +128,18 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
     <form id="add-game-form" className="space-y-4" onSubmit={handleSubmit}>
       <div>
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {isEditMode ? 'Editar jogo' : 'Adicionar novo jogo'}
+          {isEditMode ? t('addGameForm.editTitle') : t('addGameForm.title')}
         </h2>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
           {isEditMode
-            ? 'Atualize os dados do jogo e salve as alterações.'
-            : 'Cadastre um jogo finalizado para atualizar sua biblioteca.'}
+            ? t('addGameForm.editDescription')
+            : t('addGameForm.description')}
         </p>
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-200" htmlFor="name">
-          Nome
+          {t('addGameForm.name')}
         </label>
         <input
           id="name"
@@ -146,7 +148,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           value={values.name}
           onChange={handleChange}
           className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
-          placeholder="Ex: Hollow Knight"
+          placeholder={t('addGameForm.namePlaceholder')}
           required
         />
       </div>
@@ -156,7 +158,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
           htmlFor="coverUrl"
         >
-          URL da capa <span className="text-zinc-500 dark:text-zinc-500">(opcional)</span>
+          {t('addGameForm.coverUrl')} <span className="text-zinc-500 dark:text-zinc-500">{t('addGameForm.coverUrlOptional')}</span>
         </label>
         <input
           id="coverUrl"
@@ -165,7 +167,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           value={values.coverUrl}
           onChange={handleChange}
           className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
-          placeholder="https://..."
+          placeholder={t('addGameForm.coverUrlPlaceholder')}
         />
       </div>
 
@@ -175,7 +177,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
             htmlFor="finishedAt"
           >
-            Data de finalizacao
+            {t('addGameForm.finishedAt')}
           </label>
           <input
             id="finishedAt"
@@ -193,7 +195,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
             htmlFor="rating"
           >
-            Nota
+            {t('addGameForm.rating')}
           </label>
           <input
             id="rating"
@@ -205,7 +207,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             value={values.rating}
             onChange={handleChange}
             className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
-            placeholder="1 a 10"
+            placeholder={t('addGameForm.ratingPlaceholder')}
             required
           />
         </div>
@@ -216,7 +218,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
           htmlFor="platform"
         >
-          Plataforma
+          {t('addGameForm.platform')}
         </label>
         <select
           id="platform"
@@ -226,7 +228,7 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
           className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 pl-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
           required
         >
-          <option value="">Selecione uma plataforma</option>
+          <option value="">{t('addGameForm.platformPlaceholder')}</option>
           <option value="PC">PC</option>
           <option value="PlayStation 5">PlayStation 5</option>
           <option value="Xbox Series">Xbox Series</option>
@@ -248,14 +250,14 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
             onClick={onCancel}
             className="flex-1 rounded-xl border border-zinc-300 bg-transparent dark:border-zinc-600 px-4 py-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300 transition-all duration-200 ease-in-out hover:border-zinc-400 hover:text-zinc-900 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
           >
-            Cancelar
+            {t('addGameForm.cancel')}
           </button>
         ) : null}
         <button
           type="submit"
           className={`rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500 ${onCancel ? 'flex-1' : 'w-full'}`}
         >
-          {isEditMode ? 'Salvar alterações' : 'Salvar jogo'}
+          {isEditMode ? t('addGameForm.saveChanges') : t('addGameForm.save')}
         </button>
       </div>
     </form>
