@@ -28,7 +28,7 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
     <article className="overflow-hidden rounded-xl border border-zinc-500/90 bg-zinc-800 shadow-[0_8px_20px_rgba(0,0,0,0.22)] transition-all duration-200 ease-in-out hover:-translate-y-1 hover:border-zinc-400 hover:shadow-[0_12px_28px_rgba(0,0,0,0.3)]">
       <div className="aspect-[2/3] overflow-hidden bg-zinc-900">
         <img
-          src={game.coverUrl}
+          src={game.coverUrl || FALLBACK_COVER}
           alt={`Capa de ${game.name}`}
           className="h-full w-full object-cover"
           onError={(event) => {
