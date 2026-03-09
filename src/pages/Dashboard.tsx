@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import AddGameForm from '../components/AddGameForm';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -35,6 +35,19 @@ function Dashboard() {
     firstField?.focus();
   }
 
+  const gamesByPlatform = useMemo(() => {
+    const map = new Map<string, Game[]>();
+    for (const game of games) {
+      const platform = game.platform || 'Outros';
+      const list = map.get(platform) ?? [];
+      list.push(game);
+      map.set(platform, list);
+    }
+    return Array.from(map.entries()).sort(([a], [b]) =>
+      a.localeCompare(b),
+    );
+  }, [games]);
+
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <ConfirmDialog
@@ -68,14 +81,23 @@ function Dashboard() {
               <StatsBar total={games.length} />
             </div>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {games.map((game) => (
-                <GameCard
-                  key={game.id}
-                  game={game}
-                  onEdit={(game) => setGameToEdit(game)}
-                  onDelete={(game) => setGameToDelete(game)}
-                />
+            <div className="mt-8 space-y-8">
+              {gamesByPlatform.map(([platform, platformGames]) => (
+                <div key={platform}>
+                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+                    {platform}
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {platformGames.map((game) => (
+                      <GameCard
+                        key={game.id}
+                        game={game}
+                        onEdit={(g) => setGameToEdit(g)}
+                        onDelete={(g) => setGameToDelete(g)}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
