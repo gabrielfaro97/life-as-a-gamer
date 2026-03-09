@@ -2,22 +2,14 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react';
 
 import type { Game } from '../types/Game';
-
-const SAMPLE_GAME: Game = {
-  id: '1',
-  name: 'The Legend of Zelda: Tears of the Kingdom',
-  coverUrl:
-    'https://cdn2.steamgriddb.com/grid/ae758fbcbd5bd841516c53b3c08ebc6f.png',
-  finishedAt: '2026-03-01T00:00:00.000Z',
-  platform: 'Nintendo Switch',
-  rating: 10,
-};
+import { loadGames, saveGames } from '../utils/storage';
 
 type GameContextValue = {
   games: Game[];
@@ -33,7 +25,11 @@ type GameProviderProps = {
 };
 
 function GameProvider({ children }: GameProviderProps) {
-  const [games, setGames] = useState<Game[]>([SAMPLE_GAME]);
+  const [games, setGames] = useState<Game[]>(loadGames);
+
+  useEffect(() => {
+    saveGames(games);
+  }, [games]);
 
   const addGame = useCallback((game: Game) => {
     setGames((current) => [game, ...current]);
