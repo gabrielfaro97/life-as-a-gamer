@@ -1,0 +1,219 @@
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+
+import type { Game } from '../types/Game';
+
+type AddGameFormProps = {
+  onSubmit: (game: Game) => void;
+};
+
+type FormValues = {
+  name: string;
+  coverUrl: string;
+  finishedAt: string;
+  platform: string;
+  rating: string;
+};
+
+const INITIAL_VALUES: FormValues = {
+  name: '',
+  coverUrl: '',
+  finishedAt: '',
+  platform: '',
+  rating: '',
+};
+
+function generateGameId() {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `game-${Date.now()}`;
+}
+
+function buildIsoDate(date: string) {
+  return new Date(`${date}T00:00:00`).toISOString();
+}
+
+function AddGameForm({ onSubmit }: AddGameFormProps) {
+  const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { name, value } = event.target;
+
+    setValues((currentValues) => ({
+      ...currentValues,
+      [name]: value,
+    }));
+
+    if (errorMessage) {
+      setErrorMessage('');
+    }
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const name = values.name.trim();
+    const coverUrl = values.coverUrl.trim();
+    const platform = values.platform.trim();
+    const rating = Number(values.rating);
+
+    if (!name || !coverUrl || !values.finishedAt || !platform || !values.rating) {
+      setErrorMessage('Preencha todos os campos obrigatorios.');
+      return;
+    }
+
+    if (!Number.isFinite(rating) || rating < 1 || rating > 10) {
+      setErrorMessage('A nota precisa ser um numero entre 1 e 10.');
+      return;
+    }
+
+    const finishedAt = buildIsoDate(values.finishedAt);
+
+    if (Number.isNaN(new Date(finishedAt).getTime())) {
+      setErrorMessage('Informe uma data de finalizacao valida.');
+      return;
+    }
+
+    onSubmit({
+      id: generateGameId(),
+      name,
+      coverUrl,
+      finishedAt,
+      platform,
+      rating,
+    });
+
+    setValues(INITIAL_VALUES);
+    setErrorMessage('');
+  }
+
+  return (
+    <form id="add-game-form" className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <h2 className="text-lg font-semibold text-zinc-100">Adicionar novo jogo</h2>
+        <p className="mt-2 text-sm text-zinc-400">
+          Cadastre um jogo finalizado para atualizar sua biblioteca.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-zinc-200" htmlFor="name">
+          Nome
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value={values.name}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          placeholder="Ex: Hollow Knight"
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label
+          className="block text-sm font-medium text-zinc-200"
+          htmlFor="coverUrl"
+        >
+          URL da capa
+        </label>
+        <input
+          id="coverUrl"
+          name="coverUrl"
+          type="url"
+          value={values.coverUrl}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          placeholder="https://..."
+          required
+        />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <label
+            className="block text-sm font-medium text-zinc-200"
+            htmlFor="finishedAt"
+          >
+            Data de finalizacao
+          </label>
+          <input
+            id="finishedAt"
+            name="finishedAt"
+            type="date"
+            value={values.finishedAt}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label
+            className="block text-sm font-medium text-zinc-200"
+            htmlFor="rating"
+          >
+            Nota
+          </label>
+          <input
+            id="rating"
+            name="rating"
+            type="number"
+            min="1"
+            max="10"
+            step="1"
+            value={values.rating}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+            placeholder="1 a 10"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label
+          className="block text-sm font-medium text-zinc-200"
+          htmlFor="platform"
+        >
+          Plataforma
+        </label>
+        <select
+          id="platform"
+          name="platform"
+          value={values.platform}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-indigo-500"
+          required
+        >
+          <option value="">Selecione uma plataforma</option>
+          <option value="PC">PC</option>
+          <option value="PlayStation 5">PlayStation 5</option>
+          <option value="Xbox Series">Xbox Series</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+          <option value="Mobile">Mobile</option>
+        </select>
+      </div>
+
+      {errorMessage ? (
+        <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {errorMessage}
+        </p>
+      ) : null}
+
+      <button
+        type="submit"
+        className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
+      >
+        Salvar jogo
+      </button>
+    </form>
+  );
+}
+
+export default AddGameForm;
