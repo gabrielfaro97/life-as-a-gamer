@@ -2,22 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
-} from 'react';
-
-import type { Game } from '../types/Game';
-
-const SAMPLE_GAME: Game = {
-  id: '1',
-  name: 'The Legend of Zelda: Tears of the Kingdom',
-  coverUrl:
-    'https://cdn2.steamgriddb.com/grid/ae758fbcbd5bd841516c53b3c08ebc6f.png',
-  finishedAt: '2026-03-01T00:00:00.000Z',
-  platform: 'Nintendo Switch',
-  rating: 10,
-};
+} from "react";
+import type { Game } from "../types/Game";
+import { loadGames, saveGames } from "../utils/storage";
 
 type GameContextValue = {
   games: Game[];
@@ -33,7 +24,11 @@ type GameProviderProps = {
 };
 
 function GameProvider({ children }: GameProviderProps) {
-  const [games, setGames] = useState<Game[]>([SAMPLE_GAME]);
+  const [games, setGames] = useState<Game[]>(loadGames);
+
+  useEffect(() => {
+    saveGames(games);
+  }, [games]);
 
   const addGame = useCallback((game: Game) => {
     setGames((current) => [game, ...current]);
@@ -44,9 +39,7 @@ function GameProvider({ children }: GameProviderProps) {
   }, []);
 
   const updateGame = useCallback((game: Game) => {
-    setGames((current) =>
-      current.map((g) => (g.id === game.id ? game : g)),
-    );
+    setGames((current) => current.map((g) => (g.id === game.id ? game : g)));
   }, []);
 
   const value = useMemo(
@@ -54,16 +47,14 @@ function GameProvider({ children }: GameProviderProps) {
     [games, addGame, removeGame, updateGame],
   );
 
-  return (
-    <GameContext.Provider value={value}>{children}</GameContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
 function useGames(): GameContextValue {
   const context = useContext(GameContext);
 
   if (!context) {
-    throw new Error('useGames deve ser usado dentro de GameProvider');
+    throw new Error("useGames deve ser usado dentro de GameProvider");
   }
 
   return context;
