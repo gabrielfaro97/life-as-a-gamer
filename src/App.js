@@ -1,9 +1,7 @@
+import Dashboard from './pages/Dashboard';
+
 function App() {
-  return (
-    <div className="App">
-      <p>Verso gato pretinho fofinho</p>
-    </div>
-  );
+  return <Dashboard />;
 }
 
 export default App;
