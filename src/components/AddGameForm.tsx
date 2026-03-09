@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
 import type { Game } from '../types/Game';
 
 type AddGameFormProps = {
+  initialGame?: Game | null;
   onSubmit: (game: Game) => void;
+  onCancel?: () => void;
 };
 
 type FormValues = {
@@ -35,9 +37,38 @@ function buildIsoDate(date: string) {
   return new Date(`${date}T00:00:00`).toISOString();
 }
 
-function AddGameForm({ onSubmit }: AddGameFormProps) {
+function isoToDateInput(iso: string) {
+  const d = new Date(iso);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function gameToFormValues(game: Game): FormValues {
+  return {
+    name: game.name,
+    coverUrl: game.coverUrl,
+    finishedAt: isoToDateInput(game.finishedAt),
+    platform: game.platform,
+    rating: String(game.rating),
+  };
+}
+
+function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const isEditMode = Boolean(initialGame);
+
+  useEffect(() => {
+    if (initialGame) {
+      setValues(gameToFormValues(initialGame));
+    } else {
+      setValues(INITIAL_VALUES);
+    }
+    setErrorMessage('');
+  }, [initialGame]);
 
   function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -77,15 +108,16 @@ function AddGameForm({ onSubmit }: AddGameFormProps) {
       return;
     }
 
-    onSubmit({
-      id: generateGameId(),
+    const game: Game = {
+      id: initialGame?.id ?? generateGameId(),
       name,
       coverUrl,
       finishedAt,
       platform,
       rating,
-    });
+    };
 
+    onSubmit(game);
     setValues(INITIAL_VALUES);
     setErrorMessage('');
   }
@@ -93,9 +125,13 @@ function AddGameForm({ onSubmit }: AddGameFormProps) {
   return (
     <form id="add-game-form" className="space-y-4" onSubmit={handleSubmit}>
       <div>
-        <h2 className="text-lg font-semibold text-zinc-100">Adicionar novo jogo</h2>
+        <h2 className="text-lg font-semibold text-zinc-100">
+          {isEditMode ? 'Editar jogo' : 'Adicionar novo jogo'}
+        </h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Cadastre um jogo finalizado para atualizar sua biblioteca.
+          {isEditMode
+            ? 'Atualize os dados do jogo e salve as alterações.'
+            : 'Cadastre um jogo finalizado para atualizar sua biblioteca.'}
         </p>
       </div>
 
@@ -206,12 +242,23 @@ function AddGameForm({ onSubmit }: AddGameFormProps) {
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
-      >
-        Salvar jogo
-      </button>
+      <div className="flex gap-3">
+        {onCancel ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex-1 rounded-xl border border-zinc-600 bg-transparent px-4 py-3 text-sm font-semibold text-zinc-300 transition-all duration-200 ease-in-out hover:border-zinc-500 hover:text-zinc-100"
+          >
+            Cancelar
+          </button>
+        ) : null}
+        <button
+          type="submit"
+          className={`rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500 ${onCancel ? 'flex-1' : 'w-full'}`}
+        >
+          {isEditMode ? 'Salvar alterações' : 'Salvar jogo'}
+        </button>
+      </div>
     </form>
   );
 }
