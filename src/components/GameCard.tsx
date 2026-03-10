@@ -6,6 +6,7 @@ type GameCardProps = {
   game: Game;
   onEdit: (game: Game) => void;
   onDelete: (game: Game) => void;
+  onSyncCover: (game: Game) => void;
 };
 
 const FALLBACK_COVER =
@@ -41,12 +42,12 @@ function RatingIndicator({ rating }: { rating: number }) {
   );
 }
 
-function GameCard({ game, onEdit, onDelete }: GameCardProps) {
+function GameCard({ game, onEdit, onDelete, onSyncCover }: GameCardProps) {
   const { t, i18n } = useTranslation();
 
   return (
     <article className="overflow-hidden rounded-xl border border-zinc-300 bg-zinc-100 shadow-md transition-all duration-200 ease-in-out hover:-translate-y-1 hover:border-zinc-400 hover:shadow-lg dark:border-zinc-500/90 dark:bg-zinc-800 dark:shadow-[0_8px_20px_rgba(0,0,0,0.22)] dark:hover:border-zinc-400 dark:hover:shadow-[0_12px_28px_rgba(0,0,0,0.3)]">
-      <div className="aspect-[2/3] overflow-hidden bg-zinc-200 dark:bg-zinc-900">
+      <div className="group/cover relative aspect-[2/3] overflow-hidden bg-zinc-200 dark:bg-zinc-900">
         <img
           src={game.coverUrl || FALLBACK_COVER}
           alt={t('gameCard.coverAlt', { name: game.name })}
@@ -56,6 +57,17 @@ function GameCard({ game, onEdit, onDelete }: GameCardProps) {
             event.currentTarget.src = FALLBACK_COVER;
           }}
         />
+        <button
+          type="button"
+          onClick={() => onSyncCover(game)}
+          className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-lg bg-black/70 px-2.5 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity hover:bg-black/80 group-hover/cover:opacity-100"
+          title={t('gameCard.syncCover')}
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          {t('gameCard.syncCover')}
+        </button>
       </div>
 
       <div className="space-y-4 p-5">

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import AddGameForm from '../components/AddGameForm';
 import ConfirmDialog from '../components/ConfirmDialog';
+import CoverSyncModal from '../components/CoverSyncModal';
 import GameCard from '../components/GameCard';
 import Header from '../components/Header';
 import StatsBar from '../components/StatsBar';
@@ -22,6 +23,7 @@ function Dashboard() {
   const { games, addGame, removeGame, updateGame } = useGames();
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [gameToDelete, setGameToDelete] = useState<Game | null>(null);
+  const [gameToSync, setGameToSync] = useState<Game | null>(null);
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [platformFilter, setPlatformFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortOption>('date-desc');
@@ -38,6 +40,17 @@ function Dashboard() {
   function handleUpdateGame(game: Game) {
     updateGame(game);
     setGameToEdit(null);
+  }
+
+  function handleSelectCover(coverUrl: string, steamGridDbId: number) {
+    if (gameToSync) {
+      updateGame({
+        ...gameToSync,
+        coverUrl,
+        steamGridDbId,
+      });
+      setGameToSync(null);
+    }
   }
 
   function handleOpenAddGame() {
@@ -127,6 +140,14 @@ function Dashboard() {
         onConfirm={handleConfirmDelete}
         onCancel={() => setGameToDelete(null)}
       />
+      {gameToSync && (
+        <CoverSyncModal
+          game={gameToSync}
+          open={Boolean(gameToSync)}
+          onClose={() => setGameToSync(null)}
+          onSelectCover={handleSelectCover}
+        />
+      )}
       <Header onAddGame={handleOpenAddGame} />
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 pb-8 pt-24 sm:px-6 sm:pt-28">
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
@@ -219,6 +240,7 @@ function Dashboard() {
                     game={game}
                     onEdit={(g) => setGameToEdit(g)}
                     onDelete={(g) => setGameToDelete(g)}
+                    onSyncCover={(g) => setGameToSync(g)}
                   />
                 ))}
               </div>

@@ -5,4 +5,7 @@ export interface Game {
   finishedAt: string;
   platform: string;
   rating: number;
+  steamGridDbId?: number;
 }
+
+export type SteamGridDbMatchStatus = 'unmatched' | 'auto-matched' | 'manual-review' | 'confirmed';
