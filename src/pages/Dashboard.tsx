@@ -166,7 +166,27 @@ function Dashboard() {
         onSubmit={gameToEdit ? handleUpdateGame : handleAddGame}
         onClose={handleCloseModal}
       />
-      <Header onAddGame={handleOpenAddGame} />
+      <Header />
+      <button
+        type="button"
+        onClick={handleOpenAddGame}
+        className="fixed bottom-6 right-6 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-indigo-500 hover:shadow-xl active:scale-95 sm:hidden"
+        aria-label={t('header.addGame')}
+        title={t('header.addGame')}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-7 w-7"
+        >
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 pb-8 pt-24 sm:px-6 sm:pt-28">
         <section>
           <div className="rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6">
@@ -182,72 +202,93 @@ function Dashboard() {
               <StatsBar total={filteredAndSortedGames.length} />
             </div>
 
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="year-filter"
-                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
-                >
-                  {t('dashboard.year')}
-                </label>
-                <select
-                  id="year-filter"
-                  value={yearFilter}
-                  onChange={(e) => setYearFilter(e.target.value)}
-                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
-                >
-                  <option value="all">{t('dashboard.all')}</option>
-                  {availableYears.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
+            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="year-filter"
+                    className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+                  >
+                    {t('dashboard.year')}
+                  </label>
+                  <select
+                    id="year-filter"
+                    value={yearFilter}
+                    onChange={(e) => setYearFilter(e.target.value)}
+                    className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                  >
+                    <option value="all">{t('dashboard.all')}</option>
+                    {availableYears.map((y) => (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="platform-filter"
+                    className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+                  >
+                    {t('dashboard.platform')}
+                  </label>
+                  <select
+                    id="platform-filter"
+                    value={platformFilter}
+                    onChange={(e) => setPlatformFilter(e.target.value)}
+                    className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                  >
+                    <option value="all">{t('dashboard.all')}</option>
+                    {availablePlatforms.map((p) => (
+                      <option key={p} value={p}>
+                        {p === OTHERS_PLATFORM ? t('dashboard.others') : p}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="sort-by"
+                    className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+                  >
+                    {t('dashboard.sort')}
+                  </label>
+                  <select
+                    id="sort-by"
+                    value={sortBy}
+                    onChange={(e) =>
+                      setSortBy(e.target.value as SortOption)
+                    }
+                    className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                  >
+                    <option value="date-desc">{t('dashboard.sortDateDesc')}</option>
+                    <option value="date-asc">{t('dashboard.sortDateAsc')}</option>
+                    <option value="name-asc">{t('dashboard.sortNameAsc')}</option>
+                    <option value="name-desc">{t('dashboard.sortNameDesc')}</option>
+                    <option value="rating-desc">{t('dashboard.sortRatingDesc')}</option>
+                    <option value="rating-asc">{t('dashboard.sortRatingAsc')}</option>
+                  </select>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="platform-filter"
-                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+              <button
+                type="button"
+                onClick={handleOpenAddGame}
+                className="hidden items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500 sm:flex"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
                 >
-                  {t('dashboard.platform')}
-                </label>
-                <select
-                  id="platform-filter"
-                  value={platformFilter}
-                  onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
-                >
-                  <option value="all">{t('dashboard.all')}</option>
-                  {availablePlatforms.map((p) => (
-                    <option key={p} value={p}>
-                      {p === OTHERS_PLATFORM ? t('dashboard.others') : p}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="sort-by"
-                  className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
-                >
-                  {t('dashboard.sort')}
-                </label>
-                <select
-                  id="sort-by"
-                  value={sortBy}
-                  onChange={(e) =>
-                    setSortBy(e.target.value as SortOption)
-                  }
-                  className="rounded-lg border border-zinc-300 bg-white pl-3 py-2 text-sm text-zinc-900 outline-none focus:border-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
-                >
-                  <option value="date-desc">{t('dashboard.sortDateDesc')}</option>
-                  <option value="date-asc">{t('dashboard.sortDateAsc')}</option>
-                  <option value="name-asc">{t('dashboard.sortNameAsc')}</option>
-                  <option value="name-desc">{t('dashboard.sortNameDesc')}</option>
-                  <option value="rating-desc">{t('dashboard.sortRatingDesc')}</option>
-                  <option value="rating-asc">{t('dashboard.sortRatingAsc')}</option>
-                </select>
-              </div>
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                {t('header.addGame')}
+              </button>
             </div>
 
             <div className="mt-8">
