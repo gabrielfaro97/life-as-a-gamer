@@ -80,6 +80,9 @@ const resources = {
       autocomplete: {
         verified: 'Verificado',
       },
+      addGameModal: {
+        close: 'Fechar',
+      },
       confirmDialog: {
         removeGame: 'Remover jogo',
         removeGameMessage: 'Tem certeza que deseja remover "{{name}}"?',
@@ -170,6 +173,9 @@ const resources = {
       },
       autocomplete: {
         verified: 'Verified',
+      },
+      addGameModal: {
+        close: 'Close',
       },
       confirmDialog: {
         removeGame: 'Remove game',
