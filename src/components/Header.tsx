@@ -24,13 +24,20 @@ function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
-        <div>
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
-            {t('app.title')}
-          </p>
-          <h1 className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-            {t('app.dashboard')}
-          </h1>
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Life as a Gamer"
+            className="h-10 w-10 sm:h-12 sm:w-12"
+          />
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+              {t('app.title')}
+            </p>
+            <h1 className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+              {t('app.dashboard')}
+            </h1>
+          </div>
         </div>
         <div className="flex h-11 flex-wrap items-center gap-2 sm:gap-3">
           <div ref={langRef} className="relative">
