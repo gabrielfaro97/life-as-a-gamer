@@ -109,17 +109,17 @@ function GameCard({ game, onEdit, onDelete, onSyncCover }: GameCardProps) {
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={() => onEdit(game)}
-            className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
-          >
-            {t('gameCard.edit')}
-          </button>
-          <button
-            type="button"
             onClick={() => onDelete(game)}
             className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-red-400"
           >
             {t('gameCard.delete')}
+          </button>
+          <button
+            type="button"
+            onClick={() => onEdit(game)}
+            className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
+          >
+            {t('gameCard.edit')}
           </button>
         </div>
       </div>
