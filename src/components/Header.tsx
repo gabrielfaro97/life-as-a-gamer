@@ -5,11 +5,7 @@ import flagBR from '../assets/bandeira-do-brasil.png';
 import flagUS from '../assets/estados-unidos-da-america.png';
 import { useTheme } from '../context/ThemeContext';
 
-type HeaderProps = {
-  onAddGame: () => void;
-};
-
-function Header({ onAddGame }: HeaderProps) {
+function Header() {
   const { t, i18n } = useTranslation();
   const { isDark, toggleTheme } = useTheme();
   const [langOpen, setLangOpen] = useState(false);
@@ -127,13 +123,6 @@ function Header({ onAddGame }: HeaderProps) {
                 />
               </svg>
             )}
-          </button>
-          <button
-            type="button"
-            onClick={onAddGame}
-            className="flex h-11 items-center rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:bg-indigo-500"
-          >
-            {t('header.addGame')}
           </button>
         </div>
       </div>
