@@ -77,6 +77,9 @@ const resources = {
         verified: 'Verificado',
         backToGames: 'Voltar para jogos',
       },
+      autocomplete: {
+        verified: 'Verificado',
+      },
       confirmDialog: {
         removeGame: 'Remover jogo',
         removeGameMessage: 'Tem certeza que deseja remover "{{name}}"?',
@@ -164,6 +167,9 @@ const resources = {
         select: 'Select',
         verified: 'Verified',
         backToGames: 'Back to games',
+      },
+      autocomplete: {
+        verified: 'Verified',
       },
       confirmDialog: {
         removeGame: 'Remove game',
