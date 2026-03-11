@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AddGameForm from '../components/AddGameForm';
+import AddGameModal from '../components/AddGameModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import CoverSyncModal from '../components/CoverSyncModal';
 import GameCard from '../components/GameCard';
@@ -21,6 +21,7 @@ type SortOption =
 function Dashboard() {
   const { t } = useTranslation();
   const { games, addGame, removeGame, updateGame } = useGames();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [gameToEdit, setGameToEdit] = useState<Game | null>(null);
   const [gameToDelete, setGameToDelete] = useState<Game | null>(null);
   const [gameToSync, setGameToSync] = useState<Game | null>(null);
@@ -37,8 +38,24 @@ function Dashboard() {
     }
   }
 
+  function handleAddGame(game: Game) {
+    addGame(game);
+    setIsModalOpen(false);
+  }
+
   function handleUpdateGame(game: Game) {
     updateGame(game);
+    setGameToEdit(null);
+    setIsModalOpen(false);
+  }
+
+  function handleEditGame(game: Game) {
+    setGameToEdit(game);
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
     setGameToEdit(null);
   }
 
@@ -55,12 +72,7 @@ function Dashboard() {
 
   function handleOpenAddGame() {
     setGameToEdit(null);
-    const formElement = document.getElementById('add-game-form');
-    formElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const firstField = formElement?.querySelector<
-      HTMLInputElement | HTMLSelectElement
-    >('input, select');
-    firstField?.focus();
+    setIsModalOpen(true);
   }
 
   const availableYears = useMemo(() => {
@@ -148,10 +160,16 @@ function Dashboard() {
           onSelectCover={handleSelectCover}
         />
       )}
+      <AddGameModal
+        open={isModalOpen}
+        initialGame={gameToEdit}
+        onSubmit={gameToEdit ? handleUpdateGame : handleAddGame}
+        onClose={handleCloseModal}
+      />
       <Header onAddGame={handleOpenAddGame} />
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 pb-8 pt-24 sm:px-6 sm:pt-28">
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-          <div className="order-2 rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6 lg:order-1">
+        <section>
+          <div className="rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
@@ -238,7 +256,7 @@ function Dashboard() {
                   <GameCard
                     key={game.id}
                     game={game}
-                    onEdit={(g) => setGameToEdit(g)}
+                    onEdit={handleEditGame}
                     onDelete={(g) => setGameToDelete(g)}
                     onSyncCover={(g) => setGameToSync(g)}
                   />
@@ -246,14 +264,6 @@ function Dashboard() {
               </div>
             </div>
           </div>
-
-          <aside className="order-1 rounded-xl bg-zinc-100 p-4 shadow-md dark:bg-zinc-800 sm:p-6 lg:order-2">
-            <AddGameForm
-            initialGame={gameToEdit}
-            onSubmit={gameToEdit ? handleUpdateGame : addGame}
-            onCancel={gameToEdit ? () => setGameToEdit(null) : undefined}
-          />
-          </aside>
         </section>
       </main>
     </div>

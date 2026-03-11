@@ -10,6 +10,7 @@ type AddGameFormProps = {
   initialGame?: Game | null;
   onSubmit: (game: Game) => void;
   onCancel?: () => void;
+  hideHeader?: boolean;
 };
 
 type FormValues = {
@@ -58,7 +59,7 @@ function gameToFormValues(game: Game): FormValues {
   };
 }
 
-function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
+function AddGameForm({ initialGame, onSubmit, onCancel, hideHeader }: AddGameFormProps) {
   const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errorMessage, setErrorMessage] = useState('');
@@ -148,16 +149,18 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
 
   return (
     <form id="add-game-form" className="space-y-4" onSubmit={handleSubmit}>
-      <div>
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {isEditMode ? t('addGameForm.editTitle') : t('addGameForm.title')}
-        </h2>
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          {isEditMode
-            ? t('addGameForm.editDescription')
-            : t('addGameForm.description')}
-        </p>
-      </div>
+      {!hideHeader && (
+        <div>
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            {isEditMode ? t('addGameForm.editTitle') : t('addGameForm.title')}
+          </h2>
+          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            {isEditMode
+              ? t('addGameForm.editDescription')
+              : t('addGameForm.description')}
+          </p>
+        </div>
+      )}
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-200" htmlFor="name">
