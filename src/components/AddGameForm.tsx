@@ -3,6 +3,8 @@ import type { ChangeEvent, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Game } from '../types/Game';
+import type { SteamGridDbGame } from '../services/steamGridDb';
+import GameAutocomplete from './GameAutocomplete';
 
 type AddGameFormProps = {
   initialGame?: Game | null;
@@ -85,6 +87,26 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
     }
   }
 
+  function handleNameChange(name: string) {
+    setValues((currentValues) => ({
+      ...currentValues,
+      name,
+    }));
+
+    if (errorMessage) {
+      setErrorMessage('');
+    }
+  }
+
+  function handleSelectGame(_game: SteamGridDbGame, coverUrl?: string) {
+    if (coverUrl) {
+      setValues((currentValues) => ({
+        ...currentValues,
+        coverUrl,
+      }));
+    }
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -141,35 +163,18 @@ function AddGameForm({ initialGame, onSubmit, onCancel }: AddGameFormProps) {
         <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-200" htmlFor="name">
           {t('addGameForm.name')}
         </label>
-        <input
+        <GameAutocomplete
           id="name"
           name="name"
-          type="text"
           value={values.name}
-          onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
+          onChange={handleNameChange}
+          onSelectGame={handleSelectGame}
           placeholder={t('addGameForm.namePlaceholder')}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-200"
-          htmlFor="coverUrl"
-        >
-          {t('addGameForm.coverUrl')} <span className="text-zinc-500 dark:text-zinc-500">{t('addGameForm.coverUrlOptional')}</span>
-        </label>
-        <input
-          id="coverUrl"
-          name="coverUrl"
-          type="url"
-          value={values.coverUrl}
-          onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-indigo-500"
-          placeholder={t('addGameForm.coverUrlPlaceholder')}
-        />
-      </div>
+      <input type="hidden" name="coverUrl" value={values.coverUrl} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
